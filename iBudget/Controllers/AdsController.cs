@@ -7,23 +7,32 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using iBudget.Data;
 using iBudget.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace iBudget.Controllers
 {
     public class AdsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHostingEnvironment he;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public AdsController(ApplicationDbContext context)
+
+        public AdsController(ApplicationDbContext context, IHostingEnvironment e, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            he = e;
+            _userManager = userManager;
         }
 
         // GET: Ads
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Ad.Include(a => a.ApplicationUser);
-            return View(await applicationDbContext.ToListAsync());
+            return View();
         }
 
         // GET: Ads/Details/5
@@ -48,6 +57,7 @@ namespace iBudget.Controllers
         // GET: Ads/Create
         public IActionResult Create()
         {
+            var userId = _userManager.GetUserId(HttpContext.User);
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
         }
@@ -57,15 +67,36 @@ namespace iBudget.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AdID,AdPost,Carousel,PaymentCollected,CarouselImage,ApplicationUserId")] Ad ad)
+        public async Task<IActionResult> Create([Bind("AdID,AdPost,Carousel,ApplicationUserId")] Ad ad)
         {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", ad.ApplicationUserId);
+            ad.ApplicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _context.Add(ad);
+            await _context.SaveChangesAsync();
+
+            var errors = ModelState
+            .Where(x => x.Value.Errors.Count > 0)
+            .Select(x => new { x.Key, x.Value.Errors })
+            .ToArray();
+
             if (ModelState.IsValid)
             {
-                _context.Add(ad);
+                //saveChanges
+
+                if (ad.Carousel == true)
+                {
+                    //create action for carousel payment 
+                    return RedirectToAction("Payment");
+                }
+                if (ad.AdPost == true)
+                {
+                    //create action for adpost payment
+                    return RedirectToAction("Payment");
+                }
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", ad.ApplicationUserId);
+
             return View(ad);
         }
 
@@ -83,7 +114,17 @@ namespace iBudget.Controllers
                 return NotFound();
             }
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", ad.ApplicationUserId);
-            return View(ad);
+            _context.Update(ad);
+            await _context.SaveChangesAsync();
+            if (ad.Carousel == true)
+            {
+                return View("UploadCarouselImage");
+            }
+
+            else
+            {
+                return View(ad);
+            }
         }
 
         // POST: Ads/Edit/5
@@ -91,7 +132,7 @@ namespace iBudget.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AdID,AdPost,Carousel,PaymentCollected,CarouselImage,ApplicationUserId")] Ad ad)
+        public async Task<IActionResult> Edit(int id, [Bind("AdID,AdPost,Carousel,PaymentCollected,ApplicationUserId")] Ad ad)
         {
             if (id != ad.AdID)
             {
@@ -155,6 +196,68 @@ namespace iBudget.Controllers
         private bool AdExists(int id)
         {
             return _context.Ad.Any(e => e.AdID == id);
+        }
+        public IActionResult Payment(int? id)
+        {
+            var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var ad = _context.Ad
+                .FirstOrDefault(m => m.ApplicationUserId == userid);
+            return View(ad);
+        }
+
+
+        public IActionResult UploadCarouselImage()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult UploadCarouselImage(string fullName, IFormFile pic, int? id)
+        {
+            {
+
+                if (pic == null)
+                {
+                    return View();
+
+                }
+
+                if (pic != null)
+
+                {
+                    var fullPath = Path.Combine(he.WebRootPath, Path.GetFileName(pic.FileName));
+                    var fileName = pic.FileName;
+
+
+                    pic.CopyTo(new FileStream(fullPath, FileMode.Create));
+
+
+
+                    var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var ad = _context.Ad
+                        .FirstOrDefault(m => m.ApplicationUserId == userid);
+
+                    ad.CarouselImage = fileName;
+                    ad.PaymentCollected = true;
+
+                    _context.Update(ad);
+
+                    _context.SaveChangesAsync();
+                    ViewData["FileLocation"] = "/" + Path.GetFileName(pic.FileName);
+
+                }
+            }
+            return View();
+        }
+        public IActionResult CreateSponseredAd()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreateSponseredAd(int? id)
+        {
+
+            return View("Create(BlogPost)");
         }
     }
 }
