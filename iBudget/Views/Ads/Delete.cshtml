@@ -30,19 +30,13 @@
             @Html.DisplayFor(model => model.PaymentCollected)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.CarouselImage)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CarouselImage)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.ApplicationUser)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.ApplicationUser.Id)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="AdID" />
         <input type="submit" value="Delete" class="btn btn-default" /> |
