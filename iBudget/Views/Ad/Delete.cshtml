@@ -1,0 +1,51 @@
+﻿@model iBudget.Models.Ad
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Ad</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AdPost)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdPost)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Carousel)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Carousel)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentCollected)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PaymentCollected)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CarouselImage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CarouselImage)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.Id)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="AdID" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

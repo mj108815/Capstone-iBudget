@@ -1,0 +1,42 @@
+﻿@model iBudget.Models.Ad
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Ad</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AdPost)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdPost)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Carousel)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Carousel)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentCollected)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PaymentCollected)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.AdID">Edit</a> |
+    @*<a asp-action="Index">Back to List</a>*@
+</div>
