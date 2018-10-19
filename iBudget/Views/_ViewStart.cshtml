@@ -1,3 +1,14 @@
 ﻿@{
-    Layout = "_Layout";
+    if (this.User.IsInRole("Customer"))
+    {
+        Layout = "~/Views/Shared/_ustomerLayout.cshtml";
+    }
+    else if (this.User.IsInRole("FinancialAnalyst"))
+    {
+        Layout = "~/Views/Shared/_FinancialAnalystLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
 }

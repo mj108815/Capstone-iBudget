@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using iBudget.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Stripe;
 
 namespace iBudget
 {
