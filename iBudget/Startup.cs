@@ -60,6 +60,7 @@ namespace iBudget
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            //StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
 
             app.UseAuthentication();
 
@@ -68,6 +69,10 @@ namespace iBudget
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(
+                 name: "pusher_auth",
+                 template: "pusher/auth",
+                 defaults: new { controller = "Auth", action = "ChannelAuth" });
             });
         }
     }

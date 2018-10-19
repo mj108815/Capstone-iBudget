@@ -17,5 +17,8 @@ namespace iBudget.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<FinancialAnalyst> FinancialAnalysts { get; set; }
         public DbSet<iBudget.Models.Ad> Ad { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Message> Message { get; set; }
+        public DbSet<UserGroup> UserGroup { get; set; }
     }
 }
