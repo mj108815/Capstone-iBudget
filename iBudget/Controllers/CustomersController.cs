@@ -7,44 +7,69 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using iBudget.Data;
 using iBudget.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace iBudget.Controllers
 {
     public class CustomersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public CustomersController(ApplicationDbContext context)
+        public CustomersController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Customers.Include(c => c.ApplicationUser);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.Customers.Include(c => c.ApplicationUser);
+            return View(await _context.Customers.ToListAsync());
+        }
+        public async Task<IActionResult> BusinessIndex()
+        {
+            return View(await _context.FinancialAnalysts.ToListAsync());
         }
 
         // GET: Customers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var customer = await _context.Customers
+            //    .Include(c => c.ApplicationUser)
+            //    .FirstOrDefaultAsync(m => m.CustomerID == id);
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var user = await _context.Customers
+                .FirstOrDefaultAsync(m => m.ApplicationUserId == userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+            //if (customer == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(customer);
+        }
+        public IActionResult FinancialAnalystDetails(int? id)
+        {
+            var financialAnalyst = _context.FinancialAnalysts.Where(b => b.FinancialAnalystID == id).FirstOrDefault();
             if (id == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .Include(c => c.ApplicationUser)
-                .FirstOrDefaultAsync(m => m.CustomerID == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return View(customer);
+            return View(financialAnalyst);
         }
-
         // GET: Customers/Create
         public IActionResult Create()
         {
@@ -61,6 +86,7 @@ namespace iBudget.Controllers
         {
             if (ModelState.IsValid)
             {
+                customer.ApplicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -72,18 +98,27 @@ namespace iBudget.Controllers
         // GET: Customers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var customer = await _context.Customers.FindAsync(id);
+            //if (customer == null)
+            //{
+            //    return NotFound();
+            //}
+            //ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", customer.ApplicationUserId);
+            //return View(customer);
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var user = await _context.Customers
+                .FirstOrDefaultAsync(m => m.ApplicationUserId == userId);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", customer.ApplicationUserId);
-            return View(customer);
+            return View(user);
         }
 
         // POST: Customers/Edit/5
@@ -155,6 +190,19 @@ namespace iBudget.Controllers
         private bool CustomerExists(int id)
         {
             return _context.Customers.Any(e => e.CustomerID == id);
+        }
+        public IActionResult Map(int? id)
+        {
+            {
+                var financialAnalyst = _context.FinancialAnalysts.Where(b => b.FinancialAnalystID == id).FirstOrDefault();
+                if (id == null)
+                {
+                    return NotFound();
+                }
+                ViewBag.CustomerAddress = financialAnalyst.StreetAddress;
+                ViewBag.CustomerZip = financialAnalyst.CityStateZip;
+                return View(financialAnalyst);
+            }
         }
     }
 }
