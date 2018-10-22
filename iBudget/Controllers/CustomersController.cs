@@ -57,7 +57,7 @@ namespace iBudget.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerID,Name,Address,ApplicationUserId")] Customer customer)
+        public async Task<IActionResult> Create([Bind("CustomerID,Name,StreetAddress,CityStateZip,ApplicationUserId,Subscribed")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace iBudget.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerID,Name,Address,ApplicationUserId")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerID,Name,StreetAddress,CityStateZip,ApplicationUserId")] Customer customer)
         {
             if (id != customer.CustomerID)
             {

@@ -15,6 +15,10 @@ namespace iBudget.Models
         public string Name { get; set; }
         [Display(Name = "Address")]
         public string Address { get; set; }
+        [Display(Name = "City, State, Zip")]
+        public string CityStateZip { get; set; }
+        [Display(Name = "Subscribing for email notifications about bill due dates")]
+        public bool Subscribed { get; set; }
         [ForeignKey("ApplicationUser")]
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }

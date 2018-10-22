@@ -7,23 +7,34 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using iBudget.Data;
 using iBudget.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using RestSharp;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace iBudget.Controllers
 {
     public class FinancialAnalystsController : Controller
     {
+        private readonly IHostingEnvironment he;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public FinancialAnalystsController(ApplicationDbContext context)
+
+        public FinancialAnalystsController(ApplicationDbContext context, IHostingEnvironment e, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            he = e;
+            _userManager = userManager;
         }
 
         // GET: FinancialAnalysts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.FinancialAnalysts.Include(f => f.ApplicationUser);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.FinancialAnalysts.Include(f => f.ApplicationUser);
+            return View(await _context.FinancialAnalysts.ToListAsync());
         }
 
         // GET: FinancialAnalysts/Details/5
@@ -33,22 +44,24 @@ namespace iBudget.Controllers
             {
                 return NotFound();
             }
-
-            var financialAnalyst = await _context.FinancialAnalysts
-                .Include(f => f.ApplicationUser)
-                .FirstOrDefaultAsync(m => m.CustomerID == id);
-            if (financialAnalyst == null)
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var user = await _context.FinancialAnalysts
+                .FirstOrDefaultAsync(m => m.ApplicationUserId == userId);
+            //var financialAnalyst = await _context.FinancialAnalysts
+            //    .Include(f => f.ApplicationUser)
+            //    .FirstOrDefaultAsync(m => m.FinancialAnalystID == id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(financialAnalyst);
+            return View(user);
         }
 
         // GET: FinancialAnalysts/Create
         public IActionResult Create()
         {
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
+            //ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
         }
 
@@ -57,33 +70,48 @@ namespace iBudget.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerID,Name,Address,ApplicationUserId")] FinancialAnalyst financialAnalyst)
+        public async Task<IActionResult> Create([Bind("FinancialAnalystID,Name,StreetAddress,CityStateZip,Bio,Promotions,Link")] FinancialAnalyst financialAnalyst)
         {
             if (ModelState.IsValid)
             {
+                financialAnalyst.ApplicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Add(financialAnalyst);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction("Index");
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", financialAnalyst.ApplicationUserId);
-            return View(financialAnalyst);
+            SendSimpleMessage();
+            return View("Details", financialAnalyst);
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(financialAnalyst);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", financialAnalyst.ApplicationUserId);
+            //return View(financialAnalyst);
         }
 
         // GET: FinancialAnalysts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var user = await _context.FinancialAnalysts
+                .FirstOrDefaultAsync(m => m.ApplicationUserId == userId);
+            //var financialAnalyst = await _context.FinancialAnalysts.FindAsync(id);
+            //if (financialAnalyst == null)
+            //{
+            //    return NotFound();
+            //}
+            //ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", financialAnalyst.ApplicationUserId);
+            if (user == null)
             {
                 return NotFound();
             }
-
-            var financialAnalyst = await _context.FinancialAnalysts.FindAsync(id);
-            if (financialAnalyst == null)
-            {
-                return NotFound();
-            }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", financialAnalyst.ApplicationUserId);
-            return View(financialAnalyst);
+            return View(user);
         }
 
         // POST: FinancialAnalysts/Edit/5
@@ -91,12 +119,12 @@ namespace iBudget.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerID,Name,Address,ApplicationUserId")] FinancialAnalyst financialAnalyst)
+        public async Task<IActionResult> Edit(int id, [Bind("FinancialAnalystID,Name,StreetAddress,CityStateZip,Bio,Promotions,Link,ApplicationUserId,Image")] FinancialAnalyst financialAnalyst)
         {
-            if (id != financialAnalyst.CustomerID)
-            {
-                return NotFound();
-            }
+            //if (id != financialAnalyst.FinancialAnalystID)
+            //{
+            //    return NotFound();
+            //}
 
             if (ModelState.IsValid)
             {
@@ -107,7 +135,7 @@ namespace iBudget.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FinancialAnalystExists(financialAnalyst.CustomerID))
+                    if (!FinancialAnalystExists(financialAnalyst.FinancialAnalystID))
                     {
                         return NotFound();
                     }
@@ -116,9 +144,9 @@ namespace iBudget.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details)); //or index
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", financialAnalyst.ApplicationUserId);
+            //ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", financialAnalyst.ApplicationUserId);
             return View(financialAnalyst);
         }
 
@@ -131,8 +159,8 @@ namespace iBudget.Controllers
             }
 
             var financialAnalyst = await _context.FinancialAnalysts
-                .Include(f => f.ApplicationUser)
-                .FirstOrDefaultAsync(m => m.CustomerID == id);
+                //.Include(f => f.ApplicationUser)
+                .FirstOrDefaultAsync(m => m.FinancialAnalystID == id);
             if (financialAnalyst == null)
             {
                 return NotFound();
@@ -154,7 +182,77 @@ namespace iBudget.Controllers
 
         private bool FinancialAnalystExists(int id)
         {
-            return _context.FinancialAnalysts.Any(e => e.CustomerID == id);
+            return _context.FinancialAnalysts.Any(e => e.FinancialAnalystID == id);
+        }
+        public async Task<IActionResult> Map(int? id)
+        {
+            {
+                if (id == null)
+                {
+                    //not sure how to revise this for Core.  This code should alert user in thr case there is no user logged in.
+                    //return HttpStatusCode.BadRequest;
+                }
+                FinancialAnalyst financialAnalyst = _context.FinancialAnalysts.Find(id);
+                if (financialAnalyst == null)
+                {
+                    return NotFound();
+                }
+                ViewBag.ApplicationUserId = new SelectList(_context.Users, "Id", "UserRole", financialAnalyst.ApplicationUser);
+                ViewBag.CustomerAddress = financialAnalyst.StreetAddress;
+                ViewBag.CustomerZip = financialAnalyst.CityStateZip;
+                return View(financialAnalyst);
+            }
+        }
+        public IActionResult UploadImage(string fullName, IFormFile pic, int? id)
+        {
+
+            if (pic == null)
+            {
+                return View();
+
+            }
+
+            if (pic != null)
+            {
+                var fullPath = Path.Combine(he.WebRootPath, Path.GetFileName(pic.FileName));
+
+                var fileName = pic.FileName;
+
+                pic.CopyTo(new FileStream(fullPath, FileMode.Create));
+
+                var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var businessProfile = _context.FinancialAnalysts
+                    .FirstOrDefault(m => m.ApplicationUserId == userid);
+
+                businessProfile.Image = fileName;
+                _context.Update(businessProfile);
+                _context.SaveChangesAsync();
+
+                ViewBag.ProfileImage = businessProfile.Image;
+
+                ViewData["FileLocation"] = "/" + Path.GetFileName(pic.FileName);
+            }
+            // test comment
+            return View();
+        }
+
+        public static IRestResponse SendSimpleMessage() //get Mailgun stuff here
+        {
+            RestClient client = new RestClient();
+            client.BaseUrl = new Uri("https://api.mailgun.net/v3");
+            client.Authenticator =
+                new HttpBasicAuthenticator("api",
+                                            Key.mailgunKey);
+            RestRequest request = new RestRequest();
+            request.AddParameter("domain", "sandbox704c2ec99b85406fa343c888c7f3507f.mailgun.org", ParameterType.UrlSegment);
+            request.Resource = "{domain}/messages";
+            request.AddParameter("from", "Excited User <mailgun@sandbox704c2ec99b85406fa343c888c7f3507f.mailgun.org>");
+            request.AddParameter("to", "svolbrecht@yahoo.com");
+            //request.AddParameter("to", "YOU@sandbox704c2ec99b85406fa343c888c7f3507f.mailgun.org");
+            request.AddParameter("subject", "Hello");
+            request.AddParameter("text", "Testing some Mailgun awesomness!");
+            request.Method = Method.POST;
+            return client.Execute(request);
         }
     }
 }
