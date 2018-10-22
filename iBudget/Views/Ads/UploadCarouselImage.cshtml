@@ -1,9 +1,9 @@
-﻿@*@using Microsoft.Extensions.Options
-    @inject IOptions<StripeSettings> Stripe*@
+﻿@using Microsoft.Extensions.Options
+    @inject IOptions<StripeSettings> Stripe
 
 @{
     ViewData["Title"] = "View";
-    @*Layout = "UploadCarouselImage";*@
+    Layout = "UploadCarouselImage";
 }
 
 <h2>You successfully paid <strong>$50.00</strong></h2>
@@ -18,13 +18,13 @@
 
     <form method="post" action="/Ads/UploadCarouselImage" enctype="multipart/form-data">
         <input type="file" name="pic" /><br />
-        @*<input type="text" name="fullName" /><br />*@
+        <input type="text" name="fullName" /><br />
         <input type="submit" value="Go" />
     </form>
 }
 
 
 
-@*<div class="form-group">
+<div class="form-group">
         <input type="submit" value="Save Image" class="btn btn-default" />
-    </div>*@
+    </div>

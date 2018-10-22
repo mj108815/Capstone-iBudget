@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace iBudget
 {
-    public class StripeDetails
+    public class StripeSettings
     {
         public string SecretKey { get; set; }
         public string PublishableKey { get; set; }

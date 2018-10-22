@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Stripe;
 
 namespace iBudget.Controllers
 {
@@ -197,22 +198,42 @@ namespace iBudget.Controllers
         {
             return _context.Ad.Any(e => e.AdID == id);
         }
-        public IActionResult Payment(int? id)
+        public IActionResult Payment()
         {
-            var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var ad = _context.Ad
-                .FirstOrDefault(m => m.ApplicationUserId == userid);
-            return View(ad);
+            return View();
         }
 
+        [HttpPost]
+        //public IActionResult Payment(string stripeEmail, string stripeToken)
+        //{
+        //    var customers = new StripeCustomerService();
+        //    var charges = new StripeChargeService();
 
+        //    var customer = customers.Create(new StripeCustomerCreateOptions
+        //    {
+        //        Email = stripeEmail,
+        //        SourceToken = stripeToken
+        //    });
+
+        //    var charge = charges.Create(new StripeChargeCreateOptions
+        //    {
+        //        Amount = 50,
+        //        Description = "Sample Charge",
+        //        Currency = "usd",
+        //        CustomerId = customer.Id
+        //    });
+
+        //    //set payment collected equal to true
+
+        //    return RedirectToAction("UploadCarouselImage");
+        //}
         public IActionResult UploadCarouselImage()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult UploadCarouselImage(string fullName, IFormFile pic, int? id)
+        public async Task<IActionResult> UploadCarouselImage(string fullName, IFormFile pic, int? id)
         {
             {
 
@@ -225,11 +246,9 @@ namespace iBudget.Controllers
                 if (pic != null)
 
                 {
-                    var fullPath = Path.Combine(he.WebRootPath, Path.GetFileName(pic.FileName));
-                    var fileName = pic.FileName;
 
-
-                    pic.CopyTo(new FileStream(fullPath, FileMode.Create));
+                    var fileName = Path.Combine(he.WebRootPath, Path.GetFileName(pic.FileName));
+                    pic.CopyTo(new FileStream(fileName, FileMode.Create));
 
 
 
@@ -237,27 +256,29 @@ namespace iBudget.Controllers
                     var ad = _context.Ad
                         .FirstOrDefault(m => m.ApplicationUserId == userid);
 
-                    ad.CarouselImage = fileName;
                     ad.PaymentCollected = true;
+                    ad.CarouselImage = fileName;
 
                     _context.Update(ad);
 
-                    _context.SaveChangesAsync();
-                    ViewData["FileLocation"] = "/" + Path.GetFileName(pic.FileName);
+                    await _context.SaveChangesAsync();
+                    //pic.CopyTo(new FileStream(fileName, FileMode.Create));
+                    //ViewData["FileLocation"] = "/" + Path.GetFileName(pic.FileName);
 
                 }
             }
             return View();
         }
-        public IActionResult CreateSponseredAd()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult CreateSponseredAd(int? id)
-        {
 
-            return View("Create(BlogPost)");
-        }
+        //public IActionResult CreateSponseredAd()
+        //{
+        //    return View();
+        //}
+        //[HttpPost]
+        //public IActionResult CreateSponseredAd(int? id)
+        //{
+
+        //    return View("Create(BlogPost)");
+        //}
     }
 }
