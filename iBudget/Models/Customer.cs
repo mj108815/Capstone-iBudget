@@ -13,8 +13,8 @@ namespace iBudget.Models
         public int CustomerID { get; set; }
         [Display(Name = "Name")]
         public string Name { get; set; }
-        [Display(Name = "Address")]
-        public string Address { get; set; }
+        [Display(Name = "Street Address")]
+        public string StreetAddress { get; set; }
         [Display(Name = "City, State, Zip")]
         public string CityStateZip { get; set; }
         [Display(Name = "Subscribing for email notifications about bill due dates")]
