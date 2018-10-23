@@ -9,6 +9,7 @@ using iBudget.Data;
 using iBudget.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using RestSharp;
 
 namespace iBudget.Controllers
 {
@@ -91,6 +92,7 @@ namespace iBudget.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            SendSimpleMessage();
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", customer.ApplicationUserId);
             return View(customer);
         }
@@ -203,6 +205,23 @@ namespace iBudget.Controllers
                 ViewBag.CustomerZip = financialAnalyst.CityStateZip;
                 return View(financialAnalyst);
             }
+        }
+        public static IRestResponse SendSimpleMessage() 
+        {
+            RestClient client = new RestClient();
+            client.BaseUrl = new Uri("https://api.mailgun.net/v3");
+            client.Authenticator =
+                new HttpBasicAuthenticator("api",
+                                            Key.mailgunKey);
+            RestRequest request = new RestRequest();
+            request.AddParameter("domain", "sandbox455d72392dbc4f2aa79a03bcf644aac8.mailgun.org", ParameterType.UrlSegment);
+            request.Resource = "{domain}/messages";
+            request.AddParameter("from", "Mailgun Sandbox <postmaster@sandbox455d72392dbc4f2aa79a03bcf644aac8.mailgun.org>");
+            request.AddParameter("to", "mj108815@yahoo.com");
+            request.AddParameter("subject", "Hello");
+            request.AddParameter("text", "Testing some Mailgun awesomeness!");
+            request.Method = Method.POST;
+            return client.Execute(request);
         }
     }
 }

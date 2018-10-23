@@ -79,7 +79,6 @@ namespace iBudget.Controllers
                 await _context.SaveChangesAsync();
                 //return RedirectToAction("Index");
             }
-            SendSimpleMessage();
             return View("Details", financialAnalyst);
             //if (ModelState.IsValid)
             //{
@@ -232,27 +231,7 @@ namespace iBudget.Controllers
 
                 ViewData["FileLocation"] = "/" + Path.GetFileName(pic.FileName);
             }
-            // test comment
             return View();
-        }
-
-        public static IRestResponse SendSimpleMessage() //get Mailgun stuff here
-        {
-            RestClient client = new RestClient();
-            client.BaseUrl = new Uri("https://api.mailgun.net/v3");
-            client.Authenticator =
-                new HttpBasicAuthenticator("api",
-                                            Key.mailgunKey);
-            RestRequest request = new RestRequest();
-            request.AddParameter("domain", "sandbox704c2ec99b85406fa343c888c7f3507f.mailgun.org", ParameterType.UrlSegment);
-            request.Resource = "{domain}/messages";
-            request.AddParameter("from", "Excited User <mailgun@sandbox704c2ec99b85406fa343c888c7f3507f.mailgun.org>");
-            request.AddParameter("to", "svolbrecht@yahoo.com");
-            //request.AddParameter("to", "YOU@sandbox704c2ec99b85406fa343c888c7f3507f.mailgun.org");
-            request.AddParameter("subject", "Hello");
-            request.AddParameter("text", "Testing some Mailgun awesomness!");
-            request.Method = Method.POST;
-            return client.Execute(request);
         }
     }
 }
