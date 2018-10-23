@@ -1,0 +1,53 @@
+﻿@model IEnumerable<iBudget.Models.Budget>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Transaction)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MonthlyEarnings)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalAmount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Transaction)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MonthlyEarnings)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalAmount)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.BudgetID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.BudgetID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.BudgetID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
