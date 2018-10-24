@@ -10,6 +10,7 @@ using iBudget.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using RestSharp;
+using RestSharp.Authenticators;
 
 namespace iBudget.Controllers
 {
@@ -92,7 +93,7 @@ namespace iBudget.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            SendSimpleMessage();
+            SendSimpleMessage(); // will go in the calendar when working
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", customer.ApplicationUserId);
             return View(customer);
         }
