@@ -220,14 +220,14 @@ namespace iBudget.Controllers
                 pic.CopyTo(new FileStream(fullPath, FileMode.Create));
 
                 var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var businessProfile = _context.FinancialAnalysts
+                var financialAnalyst = _context.FinancialAnalysts
                     .FirstOrDefault(m => m.ApplicationUserId == userid);
 
-                businessProfile.Image = fileName;
-                _context.Update(businessProfile);
+                financialAnalyst.Image = fileName;
+                _context.Update(financialAnalyst);
                 _context.SaveChangesAsync();
 
-                ViewBag.ProfileImage = businessProfile.Image;
+                ViewBag.ProfileImage = financialAnalyst.Image;
 
                 ViewData["FileLocation"] = "/" + Path.GetFileName(pic.FileName);
             }
