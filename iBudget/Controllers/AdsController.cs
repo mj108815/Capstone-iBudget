@@ -203,30 +203,6 @@ namespace iBudget.Controllers
             return View();
         }
 
-        [HttpPost]
-        //public IActionResult Payment(string stripeEmail, string stripeToken)
-        //{
-        //    var customers = new StripeCustomerService();
-        //    var charges = new StripeChargeService();
-
-        //    var customer = customers.Create(new StripeCustomerCreateOptions
-        //    {
-        //        Email = stripeEmail,
-        //        SourceToken = stripeToken
-        //    });
-
-        //    var charge = charges.Create(new StripeChargeCreateOptions
-        //    {
-        //        Amount = 50,
-        //        Description = "Sample Charge",
-        //        Currency = "usd",
-        //        CustomerId = customer.Id
-        //    });
-
-        //    //set payment collected equal to true
-
-        //    return RedirectToAction("UploadCarouselImage");
-        //}
         public IActionResult UploadCarouselImage()
         {
             return View();
@@ -269,16 +245,5 @@ namespace iBudget.Controllers
             }
             return View();
         }
-
-        //public IActionResult CreateSponseredAd()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public IActionResult CreateSponseredAd(int? id)
-        //{
-
-        //    return View("Create(BlogPost)");
-        //}
     }
 }
