@@ -23,5 +23,6 @@ namespace iBudget.Models
         public double MonthlyEarnings { get; set; }
         [Display(Name = "TotalAmount")]
         public double TotalAmount { get; set; }
+
     }
 }
