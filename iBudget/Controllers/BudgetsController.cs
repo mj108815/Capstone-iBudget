@@ -22,7 +22,7 @@ namespace iBudget.Controllers
         // GET: Budgets
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Budget.Include(b => b.Transaction);
+            var applicationDbContext = _context.Budget.Include(b => b.Transactions);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace iBudget.Controllers
             }
 
             var budget = await _context.Budget
-                .Include(b => b.Transaction)
+                .Include(b => b.Transactions)
                 .FirstOrDefaultAsync(m => m.BudgetID == id);
             if (budget == null)
             {
@@ -48,7 +48,7 @@ namespace iBudget.Controllers
         // GET: Budgets/Create
         public IActionResult Create()
         {
-            ViewData["TransactionID"] = new SelectList(_context.Set<Transaction>(), "ID", "ID");
+            ViewData["Transactions"] = new SelectList(_context.Set<Budget>(), "ID", "ID");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace iBudget.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BudgetID,TransactionID,Amount,MonthlyEarnings,TotalAmount")] Budget budget)
+        public async Task<IActionResult> Create([Bind("BudgetID,Transactions,Amount,MonthlyEarnings,TotalAmount")] Budget budget)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace iBudget.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TransactionID"] = new SelectList(_context.Set<Transaction>(), "ID", "ID", budget.TransactionID);
+            ViewData["Transactions"] = new SelectList(_context.Set<Budget>(), "ID", "ID", budget.Transactions);
             return View(budget);
         }
 
@@ -82,7 +82,7 @@ namespace iBudget.Controllers
             {
                 return NotFound();
             }
-            ViewData["TransactionID"] = new SelectList(_context.Set<Transaction>(), "ID", "ID", budget.TransactionID);
+            ViewData["Transactions"] = new SelectList(_context.Set<Budget>(), "ID", "ID", budget.Transactions);
             return View(budget);
         }
 
@@ -91,7 +91,7 @@ namespace iBudget.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BudgetID,TransactionID,Amount,MonthlyEarnings,TotalAmount")] Budget budget)
+        public async Task<IActionResult> Edit(int id, [Bind("BudgetID,Transactions,Amount,MonthlyEarnings,TotalAmount")] Budget budget)
         {
             if (id != budget.BudgetID)
             {
@@ -118,7 +118,7 @@ namespace iBudget.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TransactionID"] = new SelectList(_context.Set<Transaction>(), "ID", "ID", budget.TransactionID);
+            ViewData["Transactions"] = new SelectList(_context.Set<Budget>(), "ID", "ID", budget.Transactions);
             return View(budget);
         }
 
@@ -131,7 +131,7 @@ namespace iBudget.Controllers
             }
 
             var budget = await _context.Budget
-                .Include(b => b.Transaction)
+                .Include(b => b.Transactions)
                 .FirstOrDefaultAsync(m => m.BudgetID == id);
             if (budget == null)
             {

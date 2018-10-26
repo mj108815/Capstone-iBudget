@@ -12,16 +12,13 @@ namespace iBudget.Models
     {
         [Key]
         public int BudgetID { get; set; }
-        [ForeignKey("Transaction")]
-        [Display(Name = "Transaction Name")]
-        public int TransactionID { get; set; }
-        public Transaction Transaction { get; set; }
-        public IEnumerable<Transaction> Transactions { get; set; }
-        [Display(Name = "Amount")]
+        [Display(Name = "Transaction")]
+        public string Transactions { get; set; }
+         [Display(Name = "Amount")]
         public double Amount { get; set; }
         [Display(Name = "Monthly Earnings")]
         public double MonthlyEarnings { get; set; }
-        [Display(Name = "TotalAmount")]
+        [Display(Name = "Total Amount")]
         public double TotalAmount { get; set; }
 
     }
