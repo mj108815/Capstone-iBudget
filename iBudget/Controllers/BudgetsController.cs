@@ -156,5 +156,13 @@ namespace iBudget.Controllers
         {
             return _context.Budget.Any(e => e.BudgetID == id);
         }
+        public IActionResult Budgets(Budget model, string command)
+        {
+            if (command == "sub")
+            {
+                model.TotalAmount = model.MonthlyEarnings - model.Amount;
+            }
+            return View(model);
+        }
     }
 }

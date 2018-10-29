@@ -198,9 +198,12 @@ namespace iBudget.Controllers
         {
             return _context.Ad.Any(e => e.AdID == id);
         }
-        public IActionResult Payment()
+        public IActionResult Payment(int ?id)
         {
-            return View();
+            var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var ad = _context.Ad
+                .FirstOrDefault(m => m.ApplicationUserId == userid);
+            return View(ad);
         }
 
         public IActionResult UploadCarouselImage()
@@ -209,7 +212,7 @@ namespace iBudget.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadCarouselImage(string fullName, IFormFile pic, int? id)
+        public IActionResult UploadCarouselImage(string fullName, IFormFile pic, int? id)
         {
             {
 
@@ -222,25 +225,21 @@ namespace iBudget.Controllers
                 if (pic != null)
 
                 {
-
-                    var fileName = Path.Combine(he.WebRootPath, Path.GetFileName(pic.FileName));
-                    pic.CopyTo(new FileStream(fileName, FileMode.Create));
-
-
+                    var fullPath = Path.Combine(he.WebRootPath, Path.GetFileName(pic.FileName));
+                    var fileName = pic.FileName;
+                    pic.CopyTo(new FileStream(fullPath, FileMode.Create));
 
                     var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     var ad = _context.Ad
                         .FirstOrDefault(m => m.ApplicationUserId == userid);
 
-                    ad.PaymentCollected = true;
                     ad.CarouselImage = fileName;
+                    ad.PaymentCollected = true;
 
                     _context.Update(ad);
 
-                    await _context.SaveChangesAsync();
-                    //pic.CopyTo(new FileStream(fileName, FileMode.Create));
-                    //ViewData["FileLocation"] = "/" + Path.GetFileName(pic.FileName);
-
+                    _context.SaveChangesAsync();
+                    ViewData["FileLocation"] = "/" + Path.GetFileName(pic.FileName);
                 }
             }
             return View();
