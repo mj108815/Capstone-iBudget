@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using RestSharp;
 using RestSharp.Authenticators;
+using System.Net;
 
 namespace iBudget.Controllers
 {
@@ -197,14 +198,20 @@ namespace iBudget.Controllers
         public IActionResult Map(int? id)
         {
             {
-                var financialAnalyst = _context.FinancialAnalysts.Where(b => b.FinancialAnalystID == id).FirstOrDefault();
+                //var financialAnalyst = _context.FinancialAnalysts.Where(b => b.FinancialAnalystID == id).FirstOrDefault();
                 if (id == null)
+                {
+                   
+                }
+                Customer customer = _context.Customers.Find(id);
+                if (customer == null)
                 {
                     return NotFound();
                 }
-                ViewBag.CustomerAddress = financialAnalyst.StreetAddress;
-                ViewBag.CustomerZip = financialAnalyst.CityStateZip;
-                return View(financialAnalyst);
+                ViewBag.ApplicationUserId = new SelectList(_context.Users, "Id", "UserRole", customer.ApplicationUser);
+                ViewBag.CustomerAddress = customer.StreetAddress;
+                ViewBag.CustomerZip = customer.CityStateZip;
+                return View(customer);
             }
         }
         public static IRestResponse SendSimpleMessage() 
@@ -215,10 +222,11 @@ namespace iBudget.Controllers
                 new HttpBasicAuthenticator("api",
                                             Key.mailgunKey);
             RestRequest request = new RestRequest();
-            request.AddParameter("domain", "sandbox455d72392dbc4f2aa79a03bcf644aac8.mailgun.org", ParameterType.UrlSegment);
+            request.AddParameter("domain", "sandboxd38a61ad30c840cfb92cf1515f62e7ea.mailgun.org", ParameterType.UrlSegment);
             request.Resource = "{domain}/messages";
-            request.AddParameter("from", "Mailgun Sandbox <postmaster@sandbox455d72392dbc4f2aa79a03bcf644aac8.mailgun.org>");
-            request.AddParameter("to", "mj108815@yahoo.com");
+            request.AddParameter("from", "Mailgun Sandbox <mailgun@sandboxd38a61ad30c840cfb92cf1515f62e7ea.mailgun.org>");
+            request.AddParameter("to", "marisajanowski@gmail.com");
+            request.AddParameter("to", "YOU@sandboxd38a61ad30c840cfb92cf1515f62e7ea.mailgun.org");
             request.AddParameter("subject", "Hello");
             request.AddParameter("text", "Testing some Mailgun awesomeness!");
             request.Method = Method.POST;
