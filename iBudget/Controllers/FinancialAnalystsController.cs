@@ -40,10 +40,10 @@ namespace iBudget.Controllers
         // GET: FinancialAnalysts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
             var userId = _userManager.GetUserId(HttpContext.User);
             var user = await _context.FinancialAnalysts
                 .FirstOrDefaultAsync(m => m.ApplicationUserId == userId);
