@@ -22,8 +22,8 @@ namespace iBudget.Controllers
         // GET: Budgets
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Budget.Include(b => b.Transactions);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.Budget.Include(b => b.Transactions);
+            return View(await _context.Budget.ToListAsync());
         }
 
         // GET: Budgets/Details/5
@@ -57,7 +57,7 @@ namespace iBudget.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BudgetID,Transactions,Amount,MonthlyEarnings,TotalAmount")] Budget budget)
+        public async Task<IActionResult> Create([Bind("BudgetID,Transactions,Amount,MonthlyEarnings,TotalAmount,AccountNumber")] Budget budget)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace iBudget.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BudgetID,Transactions,Amount,MonthlyEarnings,TotalAmount")] Budget budget)
+        public async Task<IActionResult> Edit(int id, [Bind("BudgetID,Transactions,Amount,MonthlyEarnings,TotalAmount,AccountNumber")] Budget budget)
         {
             if (id != budget.BudgetID)
             {
