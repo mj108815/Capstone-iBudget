@@ -31,7 +31,7 @@ namespace iBudget.Controllers
             //var applicationDbContext = _context.Customers.Include(c => c.ApplicationUser);
             return View(await _context.Customers.ToListAsync());
         }
-        public async Task<IActionResult> BusinessIndex()
+        public async Task<IActionResult> FinancialAnalystIndex()
         {
             return View(await _context.FinancialAnalysts.ToListAsync());
         }
