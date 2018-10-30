@@ -9,5 +9,6 @@ namespace iBudget
     {
         public static string key = "";
         public static string mailgunKey = "";
+
     }
 }
