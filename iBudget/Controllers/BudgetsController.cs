@@ -156,6 +156,7 @@ namespace iBudget.Controllers
         {
             return _context.Budget.Any(e => e.BudgetID == id);
         }
+        [HttpPost]
         public IActionResult Budgets(Budget model, string command)
         {
             if (command == "sub")
@@ -164,5 +165,6 @@ namespace iBudget.Controllers
             }
             return View(model);
         }
+
     }
 }
