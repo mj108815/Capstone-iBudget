@@ -195,13 +195,12 @@ namespace iBudget.Controllers
         {
             return _context.Customers.Any(e => e.CustomerID == id);
         }
-        public IActionResult Map(int? id)
+        public async Task<IActionResult> Map(int? id)
         {
             {
-                //var financialAnalyst = _context.FinancialAnalysts.Where(b => b.FinancialAnalystID == id).FirstOrDefault();
                 if (id == null)
                 {
-                   
+
                 }
                 Customer customer = _context.Customers.Find(id);
                 if (customer == null)
@@ -232,5 +231,15 @@ namespace iBudget.Controllers
             request.Method = Method.POST;
             return client.Execute(request);
         }
+        //private async Task SendEmail(string email, string subject, string htmlContent)
+        //{
+        //    var apiKey = "YOUR SENDGRID API Key";
+        //    var client = new SendGridClient(apiKey);
+        //    var from = new EmailAddress("support@dotnetthoughts.net", "Support");
+        //    var to = new EmailAddress(email);
+        //    var plainTextContent = Regex.Replace(htmlContent, "<[^>]*>", "");
+        //    var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+        //    var response = await client.SendEmailAsync(msg);
+        //}
     }
 }
