@@ -100,7 +100,7 @@ namespace iBudget.Controllers
             //};
 
             //smtpClient.Send(mailMessage);
-            SendEmail();
+            //SendEmail();
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", customer.ApplicationUserId);
             return View(customer);
         }
@@ -241,11 +241,15 @@ namespace iBudget.Controllers
             var client = new SendGridClient(Key.sendGridKey);
             var from = new EmailAddress("mj108815@gmail.com", "Example User");
             var subject = "Sending with SendGrid is Fun";
-            var to = new EmailAddress("mj108815@gmail.com", "Example User");
+            var to = new EmailAddress("marisajanowski@gmail.com", "Example User");
             var plainTextContent = "and easy to do anywhere, even with C#";
             var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
+        }
+        private static void Email()
+        {
+            SendEmail().Wait();
         }
     }
 }
