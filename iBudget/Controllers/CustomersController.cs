@@ -100,7 +100,7 @@ namespace iBudget.Controllers
             //};
 
             //smtpClient.Send(mailMessage);
-            await SendEmail();
+            SendEmail();
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", customer.ApplicationUserId);
             return View(customer);
         }

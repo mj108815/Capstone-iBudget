@@ -33,23 +33,15 @@ namespace iBudget.Controllers
         // GET: FinancialAnalysts
         public async Task<IActionResult> Index()
         {
-            //var applicationDbContext = _context.FinancialAnalysts.Include(f => f.ApplicationUser);
             return View(await _context.FinancialAnalysts.ToListAsync());
         }
 
         // GET: FinancialAnalysts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            //if (id == null)
-            //{
-            //    return NotFound();
-            //}
             var userId = _userManager.GetUserId(HttpContext.User);
             var user = await _context.FinancialAnalysts
                 .FirstOrDefaultAsync(m => m.ApplicationUserId == userId);
-            //var financialAnalyst = await _context.FinancialAnalysts
-            //    .Include(f => f.ApplicationUser)
-            //    .FirstOrDefaultAsync(m => m.FinancialAnalystID == id);
             if (user == null)
             {
                 return NotFound();
@@ -61,7 +53,6 @@ namespace iBudget.Controllers
         // GET: FinancialAnalysts/Create
         public IActionResult Create()
         {
-            //ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
         }
 
@@ -77,35 +68,16 @@ namespace iBudget.Controllers
                 financialAnalyst.ApplicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Add(financialAnalyst);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction("Index");
             }
             return View("Details", financialAnalyst);
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(financialAnalyst);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", financialAnalyst.ApplicationUserId);
-            //return View(financialAnalyst);
         }
 
         // GET: FinancialAnalysts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            //if (id == null)
-            //{
-            //    return NotFound();
-            //}
             var userId = _userManager.GetUserId(HttpContext.User);
             var user = await _context.FinancialAnalysts
                 .FirstOrDefaultAsync(m => m.ApplicationUserId == userId);
-            //var financialAnalyst = await _context.FinancialAnalysts.FindAsync(id);
-            //if (financialAnalyst == null)
-            //{
-            //    return NotFound();
-            //}
-            //ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", financialAnalyst.ApplicationUserId);
             if (user == null)
             {
                 return NotFound();
@@ -120,11 +92,6 @@ namespace iBudget.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("FinancialAnalystID,Name,StreetAddress,CityStateZip,Bio,Promotions,Link,ApplicationUserId,Image")] FinancialAnalyst financialAnalyst)
         {
-            //if (id != financialAnalyst.FinancialAnalystID)
-            //{
-            //    return NotFound();
-            //}
-
             if (ModelState.IsValid)
             {
                 try
@@ -143,9 +110,8 @@ namespace iBudget.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Details)); //or index
+                return RedirectToAction(nameof(Details));
             }
-            //ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", financialAnalyst.ApplicationUserId);
             return View(financialAnalyst);
         }
 
@@ -158,7 +124,6 @@ namespace iBudget.Controllers
             }
 
             var financialAnalyst = await _context.FinancialAnalysts
-                //.Include(f => f.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.FinancialAnalystID == id);
             if (financialAnalyst == null)
             {
@@ -188,8 +153,6 @@ namespace iBudget.Controllers
             {
                 if (id == null)
                 {
-                    //not sure how to revise this for Core.  This code should alert user in thr case there is no user logged in.
-                    //return HttpStatusCode.BadRequest;
                 }
                 FinancialAnalyst financialAnalyst = _context.FinancialAnalysts.Find(id);
                 if (financialAnalyst == null)

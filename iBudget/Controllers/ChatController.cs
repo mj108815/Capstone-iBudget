@@ -37,9 +37,7 @@ namespace iBudget.Controllers
                               })
                       .ToList();
 
-            ViewData["UserGroups"] = groups;
-
-            // get all users      
+            ViewData["UserGroups"] = groups;      
             ViewData["Users"] = _userManager.Users;
             return View();
         }
