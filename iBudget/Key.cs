@@ -7,6 +7,6 @@ namespace iBudget
 {
     public class Key
     {
-        public static string key = "AIzaSyA6EKQ9fiKi4M0mWPvxGgOozzjClB9u89w";
+        public static string key = "";
     }
 }

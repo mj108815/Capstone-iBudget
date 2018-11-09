@@ -18,8 +18,8 @@ namespace iBudget
         {
             CreateWebHostBuilder(args).Build().Run();
             // Find your Account Sid and Token at twilio.com/console
-            const string accountSid = "AC878e5513a8dfc8a639c7c9f5ba08f7ec";
-            const string authToken = "3e334c54d8d1f81a2eac24d65150af72";
+            const string accountSid = "";
+            const string authToken = "";
 
             TwilioClient.Init(accountSid, authToken);
 
