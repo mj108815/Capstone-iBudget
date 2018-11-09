@@ -21,39 +21,45 @@
             <th>
                 @Html.DisplayNameFor(model => model.MonthlyEarnings)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalAmount)
-            </th>
             @*<th>
-                @Html.DisplayNameFor(model => model.AccountNumber)
+                @Html.DisplayNameFor(model => model.TotalAmount)
             </th>*@
+            @*<th>
+                   @Html.DisplayNameFor(model => model.AccountNumber)
+                </th>*@
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Transactions)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MonthlyEarnings)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalAmount)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.AccountNumber)
-            </td>*@
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.BudgetID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.BudgetID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.BudgetID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Transactions)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>c.
+
+                .
+                0
+                    @Html.DisplayFor(modelItem => item.MonthlyEarnings)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.TotalAmount)
+                </td>*@
+                @*<td>
+                       @Html.DisplayFor(modelItem => item.AccountNumber)
+                    </td>*@
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.BudgetID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.BudgetID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.BudgetID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<iframe width="219" height="302" src="https://calculator-1.com/outdoor/?f=000000&r=666666" scrolling="no" frameborder="0"></iframe><br />@*<a href="https://calculator-1.com/">Calculator-1.com - The Best Free Online Calculatorн</a>*@

@@ -192,19 +192,29 @@ namespace iBudget.Controllers
         public async Task<IActionResult> Map(int? id)
         {
             {
-                if (id == null)
-                {
-
-                }
-                Customer customer = _context.Customers.Find(id);
-                if (customer == null)
-                {
-                    return NotFound();
-                }
-                ViewBag.ApplicationUserId = new SelectList(_context.Users, "Id", "UserRole", customer.ApplicationUser);
-                ViewBag.CustomerAddress = customer.StreetAddress;
-                ViewBag.CustomerZip = customer.CityStateZip;
-                return View(customer);
+                //Customer customer = null;
+                //if (id == null)
+                //{
+                //    var customers = await _context.Customers
+                //                    .Include(c => c.ApplicationUser)
+                //                    .FirstOrDefaultAsync(m => m.CustomerID == id);
+                //    //var loggedInCustomer = (from c in _context.Customers
+                //    //                        where c.CustomerID == id
+                //    //                        select c);
+                //    //customer.ApplicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                //}
+                //else
+                //{
+                //    customer = _context.Customers.Find(id);
+                //}
+                //if (customer == null)
+                //{
+                //    return NotFound();
+                //}
+                //ViewBag.ApplicationUserId = new SelectList(_context.Users, "Id", "UserRole", customer.ApplicationUser);
+                //ViewBag.CustomerAddress = customer.StreetAddress;
+                //ViewBag.CustomerZip = customer.CityStateZip;
+                return View(/*customer*/);
             }
         }
         //public static IRestResponse SendSimpleMessage() 
@@ -235,21 +245,21 @@ namespace iBudget.Controllers
         //    var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
         //    var response = await client.SendEmailAsync(msg);
         //}
-        public static async Task SendEmail()
-        {
-            var apiKey = Environment.GetEnvironmentVariable("NAME_OF_THE_ENVIRONMENT_VARIABLE_FOR_YOUR_SENDGRID_KEY");
-            var client = new SendGridClient(Key.sendGridKey);
-            var from = new EmailAddress("mj108815@gmail.com", "Example User");
-            var subject = "Sending with SendGrid is Fun";
-            var to = new EmailAddress("marisajanowski@gmail.com", "Example User");
-            var plainTextContent = "and easy to do anywhere, even with C#";
-            var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            var response = await client.SendEmailAsync(msg);
-        }
-        private static void Email()
-        {
-            SendEmail().Wait();
-        }
+        //public static async Task SendEmail()
+        //{
+        //    var apiKey = Environment.GetEnvironmentVariable("NAME_OF_THE_ENVIRONMENT_VARIABLE_FOR_YOUR_SENDGRID_KEY");
+        //    var client = new SendGridClient(Key.sendGridKey);
+        //    var from = new EmailAddress("mj108815@gmail.com", "Example User");
+        //    var subject = "Sending with SendGrid is Fun";
+        //    var to = new EmailAddress("marisajanowski@gmail.com", "Example User");
+        //    var plainTextContent = "and easy to do anywhere, even with C#";
+        //    var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
+        //    var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+        //    var response = await client.SendEmailAsync(msg);
+        //}
+        //private static void Email()
+        //{
+        //    SendEmail().Wait();
+        //}
     }
 }
