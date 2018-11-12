@@ -196,5 +196,9 @@ namespace iBudget.Controllers
             }
             return View();
         }
+        public IActionResult Stock(int? id)
+        {
+            return View();
+        }
     }
 }
