@@ -151,18 +151,19 @@ namespace iBudget.Controllers
         public async Task<IActionResult> Map(int? id)
         {
             {
-                if (id == null)
-                {
-                }
-                FinancialAnalyst financialAnalyst = _context.FinancialAnalysts.Find(id);
-                if (financialAnalyst == null)
-                {
-                    return NotFound();
-                }
-                ViewBag.ApplicationUserId = new SelectList(_context.Users, "Id", "UserRole", financialAnalyst.ApplicationUser);
-                ViewBag.CustomerAddress = financialAnalyst.StreetAddress;
-                ViewBag.CustomerZip = financialAnalyst.CityStateZip;
-                return View(financialAnalyst);
+                //if (id == null)
+                //{
+                //}
+                //var financialAnalyst = await _context.FinancialAnalysts
+                //   .FirstOrDefaultAsync(m => m.FinancialAnalystID == id);
+                //if (financialAnalyst == null)
+                //{
+                //    return NotFound();
+                //}
+                //ViewBag.ApplicationUserId = new SelectList(_context.Users, "Id", "UserRole", financialAnalyst.ApplicationUser);
+                //ViewBag.CustomerAddress = financialAnalyst.StreetAddress;
+                //ViewBag.CustomerZip = financialAnalyst.CityStateZip;
+                return View(/*financialAnalyst*/);
             }
         }
         public IActionResult UploadImage(string fullName, IFormFile pic, int? id)

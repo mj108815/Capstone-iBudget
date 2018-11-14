@@ -18,8 +18,8 @@ namespace iBudget.Controllers
                 .EventId("unique-event-id")
                 .Summary("A Bill Due")
                 .Description("Phone Bill Due")
-                .Start(2018, 11, 15, 12, 0)
-                .End(2018, 11, 15, 12, 30)
+                .Start(2018, 11, 16, 12, 0)
+                .End(2018, 11, 16, 12, 30)
                 .Location("Home");
             var calendarId = "";
             cronofy.UpsertEvent(calendarId, eventBuilder);

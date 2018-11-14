@@ -1,6 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
 @{
 
     <form method="post" action="/FinancialAnalysts/UploadImage" enctype="multipart/form-data">
@@ -10,6 +8,5 @@
     </form>
 }
 
-@*<h2>Upload An Image</h2>*@
 <label>@ViewData["fname"]</label></br>
 <img src="@ViewData["fileLocation"]" />

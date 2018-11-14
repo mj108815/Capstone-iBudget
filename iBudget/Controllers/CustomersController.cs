@@ -83,24 +83,6 @@ namespace iBudget.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            //var mailMessage = new MailMessage
-            //{
-            //    From = new MailAddress("support@dotnetthoughts.net"),
-            //    Subject = "Hello World",
-            //    Body = "Test email from Send Grid SMTP Settings"
-            //};
-
-            //mailMessage.To.Add("anuraj@dotnetthoughts.net");
-
-            //var smtpClient = new SmtpClient
-            //{
-            //    Credentials = new NetworkCredential("Your-Username@azure.com", "Your-Password"),
-            //    Host = "smtp.sendgrid.net",
-            //    Port = 587
-            //};
-
-            //smtpClient.Send(mailMessage);
-            //SendEmail();
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", customer.ApplicationUserId);
             return View(customer);
         }
@@ -189,7 +171,7 @@ namespace iBudget.Controllers
         {
             return _context.Customers.Any(e => e.CustomerID == id);
         }
-        public async Task<IActionResult> Map(int? id)
+        public IActionResult Map(int? id)
         {
             {
                 //Customer customer = null;
@@ -215,51 +197,17 @@ namespace iBudget.Controllers
                 //ViewBag.CustomerAddress = customer.StreetAddress;
                 //ViewBag.CustomerZip = customer.CityStateZip;
                 return View(/*customer*/);
+                //{
+                //    var financialAnalyst = _context.FinancialAnalysts.Where(b => b.FinancialAnalystID == id).FirstOrDefault();
+                //    if (id == null)
+                //    {
+                //        return NotFound();
+                //    }
+                //    ViewBag.CustomerAddress = financialAnalyst.StreetAddress;
+                //    ViewBag.CustomerZip = financialAnalyst.CityStateZip;
+                //    return View(financialAnalyst);
+                //}
             }
         }
-        //public static IRestResponse SendSimpleMessage() 
-        //{
-        //    RestClient client = new RestClient();
-        //    client.BaseUrl = new Uri("https://api.mailgun.net/v3");
-        //    client.Authenticator =
-        //        new HttpBasicAuthenticator("api",
-        //                                    Key.mailgunKey);
-        //    RestRequest request = new RestRequest();
-        //    request.AddParameter("domain", "sandboxd38a61ad30c840cfb92cf1515f62e7ea.mailgun.org", ParameterType.UrlSegment);
-        //    request.Resource = "{domain}/messages";
-        //    request.AddParameter("from", "Mailgun Sandbox <mailgun@sandboxd38a61ad30c840cfb92cf1515f62e7ea.mailgun.org>");
-        //    request.AddParameter("to", "marisajanowski@gmail.com");
-        //    request.AddParameter("to", "YOU@sandboxd38a61ad30c840cfb92cf1515f62e7ea.mailgun.org");
-        //    request.AddParameter("subject", "Hello");
-        //    request.AddParameter("text", "Testing some Mailgun awesomeness!");
-        //    request.Method = Method.POST;
-        //    return client.Execute(request);
-        //}
-        //private async Task SendEmail(string email, string subject, string htmlContent)
-        //{
-        //    var apiKey = "YOUR SENDGRID API Key";
-        //    var client = new SendGridClient(apiKey);
-        //    var from = new EmailAddress("support@dotnetthoughts.net", "Support");
-        //    var to = new EmailAddress(email);
-        //    var plainTextContent = Regex.Replace(htmlContent, "<[^>]*>", "");
-        //    var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-        //    var response = await client.SendEmailAsync(msg);
-        //}
-        //public static async Task SendEmail()
-        //{
-        //    var apiKey = Environment.GetEnvironmentVariable("NAME_OF_THE_ENVIRONMENT_VARIABLE_FOR_YOUR_SENDGRID_KEY");
-        //    var client = new SendGridClient(Key.sendGridKey);
-        //    var from = new EmailAddress("mj108815@gmail.com", "Example User");
-        //    var subject = "Sending with SendGrid is Fun";
-        //    var to = new EmailAddress("marisajanowski@gmail.com", "Example User");
-        //    var plainTextContent = "and easy to do anywhere, even with C#";
-        //    var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
-        //    var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-        //    var response = await client.SendEmailAsync(msg);
-        //}
-        //private static void Email()
-        //{
-        //    SendEmail().Wait();
-        //}
     }
 }

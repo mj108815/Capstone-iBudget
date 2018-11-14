@@ -21,13 +21,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.MonthlyEarnings)
             </th>
-            @*<th>
+            <th>
                 @Html.DisplayNameFor(model => model.TotalAmount)
-            </th>*@
-            @*<th>
-                   @Html.DisplayNameFor(model => model.AccountNumber)
-                </th>*@
-            <th></th>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -43,12 +39,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.MonthlyEarnings)
                 </td>
-                @*<td>
+                <td>
                     @Html.DisplayFor(modelItem => item.TotalAmount)
-                </td>*@
-                @*<td>
-                       @Html.DisplayFor(modelItem => item.AccountNumber)
-                    </td>*@
+                </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.BudgetID">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.BudgetID">Details</a> |

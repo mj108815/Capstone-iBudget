@@ -20,10 +20,21 @@ namespace iBudget.Controllers
         }
 
         // GET: Budgets
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int x, Budget model)
         {
-            //var applicationDbContext = _context.Budget.Include(b => b.Transactions);
-            return View(await _context.Budget.ToListAsync());
+            ////var applicationDbContext = _context.Budget.Include(b => b.Transactions);
+            //return View(await _context.Budget.ToListAsync());
+            var allBudgets = await _context.Budget.ToListAsync();
+            double amountLeftover = allBudgets[0].MonthlyEarnings;
+
+            for (int i = 0; i > x; i++)
+            {
+                amountLeftover = model.MonthlyEarnings - model.Amount;
+            }
+            // loop over allBudgets, and subtract each 'amount' from monthly earnings
+
+            return View(allBudgets);
+
         }
 
         // GET: Budgets/Details/5
