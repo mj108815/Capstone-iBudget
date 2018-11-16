@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="avapi" Version="1.4.8.3" />
     <PackageReference Include="Cronofy" Version="0.25.0" />
     <PackageReference Include="Kendo.Mvc" Version="2016.2.617" />
     <PackageReference Include="Microsoft.AspNetCore.App" />

@@ -151,19 +151,18 @@ namespace iBudget.Controllers
         public async Task<IActionResult> Map(int? id)
         {
             {
-                //if (id == null)
-                //{
-                //}
-                //var financialAnalyst = await _context.FinancialAnalysts
-                //   .FirstOrDefaultAsync(m => m.FinancialAnalystID == id);
-                //if (financialAnalyst == null)
-                //{
-                //    return NotFound();
-                //}
-                //ViewBag.ApplicationUserId = new SelectList(_context.Users, "Id", "UserRole", financialAnalyst.ApplicationUser);
-                //ViewBag.CustomerAddress = financialAnalyst.StreetAddress;
-                //ViewBag.CustomerZip = financialAnalyst.CityStateZip;
-                return View(/*financialAnalyst*/);
+                if (id == null)
+                {
+                }
+                var financialAnalyst = await _context.FinancialAnalysts
+                   .FirstOrDefaultAsync(m => m.FinancialAnalystID == id);
+                if (financialAnalyst == null)
+                {
+                }
+                ViewBag.ApplicationUserId = new SelectList(_context.Users, "Id", "UserRole", financialAnalyst.ApplicationUser);
+                ViewBag.StreetAddress = financialAnalyst.StreetAddress;
+                ViewBag.CityStateZip = financialAnalyst.CityStateZip;
+                return View(financialAnalyst);
             }
         }
         public IActionResult UploadImage(string fullName, IFormFile pic, int? id)
@@ -195,10 +194,6 @@ namespace iBudget.Controllers
 
                 ViewData["FileLocation"] = "/" + Path.GetFileName(pic.FileName);
             }
-            return View();
-        }
-        public IActionResult Stock(int? id)
-        {
             return View();
         }
     }

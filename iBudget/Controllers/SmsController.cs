@@ -31,7 +31,7 @@ namespace iBudget.Controllers
             TwilioClient.Init(accountSid, authToken);
 
             var message = MessageResource.Create(
-                body: "Reminder about bill due tommorow.",
+                body: "Reminder about bill due at the end of the month.",
                 from: new Twilio.Types.PhoneNumber("+14142694765"),
                 to: new Twilio.Types.PhoneNumber("+14143260740")
             );
